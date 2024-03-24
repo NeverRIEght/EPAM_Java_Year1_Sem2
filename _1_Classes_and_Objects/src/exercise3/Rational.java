@@ -1,9 +1,9 @@
 package exercise3;
 
 class Rational {
-    private int p; // numerator
+    private final int p; // numerator
 
-    private int q; // denominator
+    private final int q; // denominator
 
     public final static Rational ZERO = new Rational(0, 1);
 
@@ -15,23 +15,32 @@ class Rational {
             this.p = p0;
             this.q = q0;
         } else {
+            int fractionGCD = gcd(p0, q0);
+            if (Math.abs(fractionGCD) != 1) {
+                p0 /= fractionGCD;
+                q0 /= fractionGCD;
+            }
+
             this.p = p0;
             this.q = q0;
-            reduceFraction();
         }
     }
 
-    private void reduceFraction() {
-        int fractionGCD = gcd(this.p, this.q);
-        while (fractionGCD != 1) {
-            this.p /= fractionGCD;
-            this.q /= fractionGCD;
-            fractionGCD = gcd(this.p, this.q);
+    private Rational reduceFraction() {
+        int p0 = this.p;
+        int q0 = this.q;
+
+        int fractionGCD = gcd(p0, q0);
+        if (Math.abs(fractionGCD) != 1) {
+            p0 /= fractionGCD;
+            q0 /= fractionGCD;
         }
+
+        return new Rational(p0, q0);
     }
 
-    private int gcd(int p, int q) {
-        return q == 0 ? p : gcd(q, p % q);
+    private int gcd(int a, int b) {
+        return b == 0 ? a : gcd(b, a % b);
     }
 
     private int lcm(int a, int b) {
@@ -47,7 +56,7 @@ class Rational {
         int p2 = commonDenominator / r.q * r.p;
 
         result = new Rational(p1 + p2, commonDenominator);
-        result.reduceFraction();
+        result = result.reduceFraction();
 
         return result;
     }
@@ -61,7 +70,7 @@ class Rational {
         int p2 = commonDenominator / r.q * r.p;
 
         result = new Rational(p1 - p2, commonDenominator);
-        result.reduceFraction();
+        result = result.reduceFraction();
 
         return result;
     }
@@ -70,7 +79,7 @@ class Rational {
         Rational result;
 
         result = new Rational(this.p * r.p, this.q * r.q);
-        result.reduceFraction();
+        result = result.reduceFraction();
 
         return result;
     }
@@ -79,7 +88,7 @@ class Rational {
         Rational result;
 
         result = new Rational(this.p * r.q, this.q * r.p);
-        result.reduceFraction();
+        result = result.reduceFraction();
 
         return result;
     }
@@ -108,6 +117,6 @@ class Rational {
             result = "-" + result;
         }
 
-        return result;
+        return result.trim();
     }
 }
