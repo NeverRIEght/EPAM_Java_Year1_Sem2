@@ -1,3 +1,5 @@
+package exercise1;
+
 public class Pair {
     private int a;
     private int b;
