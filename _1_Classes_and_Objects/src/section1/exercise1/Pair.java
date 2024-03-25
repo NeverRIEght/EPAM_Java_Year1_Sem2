@@ -1,4 +1,4 @@
-package exercise1;
+package section1.exercise1;
 
 public class Pair {
     private int a;

@@ -1,4 +1,4 @@
-package exercise2;
+package section1.exercise2;
 
 class Counter {
     private int state;
