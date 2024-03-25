@@ -9,12 +9,15 @@ class Solution {
         try (Scanner sc = new Scanner(System.in)) {
             //input material’s name and density
             String materialName = sc.nextLine();
-            double materialDensity = sc.nextDouble();
+            double materialDensity = sc.nextDouble(); // конец строки здесь не воспринимается при нажатии Enter
+            //sc.next();
+//            double materialDensity = Double.parseDouble(sc.nextLine());
             Material material = new Material(materialName, materialDensity);
 
             //input subject’s name and volume
-            String subjectName = sc.nextLine();
+            String subjectName = sc.nextLine(); // конец строки провериться после ввода следующей строки и вызовет ошибку
             double subjectVolume = sc.nextDouble();
+//            double subjectVolume = Double.parseDouble(sc.nextLine());
 
             //create a Subject instance that consists of the given material with input values
             Subject subject = new Subject(subjectName, material, subjectVolume);
