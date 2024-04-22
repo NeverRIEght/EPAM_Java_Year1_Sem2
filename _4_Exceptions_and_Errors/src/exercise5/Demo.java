@@ -72,8 +72,11 @@ class Demo {
                 System.out.println(result);
             } catch (DateTimeParseException e) {
                 System.out.println(e.getMessage() +
-                        ": The illegal sequence begins with the character '" +
-                        e.getParsedString() + "' at index " + e.getErrorIndex());
+                        ": The illegal sequence begins with the character " +
+                        "'" +
+                        e.getParsedString() +
+                        "'" +
+                        " at index " + e.getErrorIndex());
             }
         }
     }
