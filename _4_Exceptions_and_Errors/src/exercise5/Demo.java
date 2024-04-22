@@ -1,58 +1,80 @@
 package exercise5;
 
-import java.time.DateTimeException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.time.format.DateTimeParseException;
 
 class Demo {
 
     public static boolean isLeap(String dateString) {
+        int day = 0;
+        int month = 0;
+        int year = 0;
 
-//        Pattern datePattern = Pattern.compile("^[0-9]{2}.[0-9]{2}.[0-9]{4}$");
-        Pattern datePattern = Pattern.compile("/");
-        Matcher dateMatcher = datePattern.matcher(dateString);
-
-        if (!dateMatcher.lookingAt()) {
-            throw new DateTimeException("Date is not correct");
+        try {
+            day = Integer.parseInt(dateString.substring(0, 2));
+        } catch (NumberFormatException e) {
+            throw new DateTimeParseException(dateString,
+                    dateString.charAt(0) + "",
+                    0);
+        }
+        if (day <= 0 || day > 31) {
+            throw new DateTimeParseException(dateString,
+                    dateString.charAt(0) + "",
+                    0);
         }
 
-        Pattern dayPattern = Pattern.compile("^([0-9]{2})");
-        Matcher dayMatcher = dayPattern.matcher(dateString);
-
-        Pattern monthPattern = Pattern.compile("\\/([0-9]{2})\\/");
-        Matcher monthMatcher = monthPattern.matcher(dateString);
-
-        Pattern yearPattern = Pattern.compile("\\.([0-9]{4})");
-        Matcher yearMatcher = yearPattern.matcher(dateString);
-
-        int day;
-        int month;
-        int year;
-
-        if (dayMatcher.lookingAt()) {
-            day = Integer.parseInt(dayMatcher.group(1));
-            System.out.println(day);
+        char firstSlash = dateString.charAt(2);
+        if (firstSlash != '/') {
+            throw new DateTimeParseException(dateString,
+                    firstSlash + "",
+                    2);
         }
 
-        if (monthMatcher.lookingAt()) {
-            month = Integer.parseInt(monthMatcher.group(1));
-            System.out.println(month);
+        try {
+            month = Integer.parseInt(dateString.substring(3, 5));
+        } catch (NumberFormatException e) {
+            throw new DateTimeParseException(dateString,
+                    dateString.charAt(3) + "",
+                    3);
+        }
+        if (month <= 0 || month > 12) {
+            throw new DateTimeParseException(dateString,
+                    dateString.charAt(3) + "",
+                    3);
         }
 
-        if (yearMatcher.lookingAt()) {
-            year = Integer.parseInt(yearMatcher.group(1));
-            System.out.println(year);
+        char secondSlash = dateString.charAt(5);
+        if (secondSlash != '/') {
+            throw new DateTimeParseException(dateString,
+                    secondSlash + "",
+                    5);
         }
 
-        return true;
+        try {
+            year = Integer.parseInt(dateString.substring(6, 10));
+        } catch (NumberFormatException | StringIndexOutOfBoundsException e) {
+            throw new DateTimeParseException(dateString,
+                    dateString.charAt(6) + "",
+                    6);
+        }
+        if (year <= 0 || year > 2024) {
+            throw new DateTimeParseException(dateString,
+                    dateString.charAt(6) + "",
+                    6);
+        }
+
+        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
     }
 
     public static void main(String[] args) {
-//        for (String arg : args) {
-//
-//        }
-
-        isLeap("20/05/2014");
+        for (String arg : args) {
+            try {
+                boolean result = Demo.isLeap(arg);
+                System.out.println(result);
+            } catch (DateTimeParseException e) {
+                System.out.println(e.getMessage() +
+                        ": The illegal sequence begins with the character '" +
+                        e.getParsedString() + "' at index " + e.getErrorIndex());
+            }
+        }
     }
-
 }
